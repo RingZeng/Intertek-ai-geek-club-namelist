@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI极客俱乐部 - 成员档案展示平台</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 临时样式，确保页面加载时有基本样式 */
+        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+        .loading { text-align: center; padding: 50px; font-size: 18px; }
+    </style>
+</head>
+<body>
+    <!-- 导航栏 -->
+    <header>
+        <div class="container">
+            <h1><i class="fas fa-robot"></i> AI极客俱乐部 - 成员档案</h1>
+            <p class="subtitle">52位AI/自动化技术爱好者的技术档案库</p>
+        </div>
+    </header>
+
+    <!-- 筛选区域 -->
+    <section class="filter-section">
+        <div class="container">
+            <h2><i class="fas fa-filter"></i> 筛选条件</h2>
+            <div class="filter-grid">
+                <!-- 工作地点筛选 -->
+                <div class="filter-group">
+                    <label for="location-filter"><i class="fas fa-map-marker-alt"></i> 工作地点</label>
+                    <select id="location-filter" class="filter-select">
+                        <option value="">所有地点</option>
+                        <option value="上海">上海</option>
+                        <option value="宁波">宁波</option>
+                        <option value="无锡">无锡</option>
+                        <option value="海宁">海宁</option>
+                        <option value="杭州">杭州</option>
+                        <option value="大连">大连</option>
+                        <option value="青岛">青岛</option>
+                        <option value="广州-KXC">广州-KXC</option>
+                        <option value="广州-Qixi">广州-Qixi</option>
+                        <option value="广州-HP">广州-HP</option>
+                        <option value="深圳-LH">深圳-LH</option>
+                        <option value="深圳-IOT">深圳-IOT</option>
+                        <option value="天津">天津</option>
+                    </select>
+                </div>
+
+                <!-- 业务线筛选 -->
+                <div class="filter-group">
+                    <label for="business-filter"><i class="fas fa-industry"></i> 业务线</label>
+                    <select id="business-filter" class="filter-select">
+                        <option value="">所有业务线</option>
+                        <option value="Hardlines">Hardlines</option>
+                        <option value="Electrical">Electrical</option>
+                        <option value="Business Assurance">Business Assurance</option>
+                        <option value="Softlines">Softlines</option>
+                        <option value="Quality Assurance">Quality Assurance</option>
+                        <option value="Transportation Technology">Transportation Technology</option>
+                        <option value="Chemical Lab">Chemical Lab</option>
+                        <option value="Food">Food</option>
+                        <option value="Building&Construction">Building&Construction</option>
+                        <option value="Marketing&PR">Marketing&PR</option>
+                        <option value="Global IT">Global IT</option>
+                        <option value="Inspection">Inspection</option>
+                        <option value="Finance">Finance</option>
+                        <option value="Caleb Brett">Caleb Brett</option>
+                    </select>
+                </div>
+
+                <!-- 搜索框 -->
+                <div class="filter-group search-group">
+                    <label for="search-input"><i class="fas fa-search"></i> 搜索成员</label>
+                    <input type="text" id="search-input" placeholder="输入姓名、部门或技能关键词...">
+                </div>
+
+                <!-- 重置按钮 -->
+                <div class="filter-group">
+                    <label>&nbsp;</label>
+                    <button id="reset-filters" class="btn-reset">
+                        <i class="fas fa-redo"></i> 重置筛选
+                    </button>
+                </div>
+            </div>
+            
+            <!-- 技术标签筛选 -->
+            <div class="tag-filter-section">
+                <h3><i class="fas fa-tags"></i> 技术标签（点击选择）</h3>
+                <div class="tag-container" id="tag-filter">
+                    <!-- 标签将由JavaScript动态生成 -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 统计信息 -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="total-members">52</h3>
+                        <p>总成员数</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="filtered-members">52</h3>
+                        <p>当前显示</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-map"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="location-count">15</h3>
+                        <p>工作地点</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">
+                        <i class="fas fa-tag"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="tag-count">12</h3>
+                        <p>技术标签</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 成员展示区域 -->
+    <main class="container">
+        <!-- 当前筛选条件显示 -->
+        <div class="active-filters" id="active-filters">
+            <h3>当前筛选：<span id="filter-summary">全部成员</span></h3>
+        </div>
+        
+        <!-- 成员卡片网格 -->
+        <div class="members-grid" id="members-grid">
+            <!-- 成员卡片将由JavaScript动态生成 -->
+            <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i> 正在加载成员数据...
+            </div>
+        </div>
+        
+        <!-- 没有结果时显示 -->
+        <div id="no-results" class="no-results" style="display: none;">
+            <i class="fas fa-search fa-3x"></i>
+            <h3>没有找到匹配的成员</h3>
+            <p>请尝试其他筛选条件</p>
+            <button id="clear-all-filters" class="btn-primary">
+                <i class="fas fa-times"></i> 清除所有筛选
+            </button>
+        </div>
+    </main>
+
+    <!-- 成员详情模态框 -->
+    <div id="member-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div id="modal-body">
+                <!-- 详情内容将由JavaScript动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-robot fa-2x"></i>
+                    <h3>AI极客俱乐部</h3>
+                </div>
+                <div class="footer-info">
+                    <p>技术交流 | 项目合作 | 资源共享</p>
+                    <p class="build-info">使用 GitHub Pages 构建 | 数据更新时间：2024年</p>
+                </div>
+            </div>
+            <div class="footer-copyright">
+                <p>© 2024 AI极客俱乐部 - 内部技术交流平台 | 共 <span id="footer-count">52</span> 位成员</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 脚本文件 -->
+    <script src="js/members-data.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
